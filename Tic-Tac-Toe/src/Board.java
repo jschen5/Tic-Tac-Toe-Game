@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Board {
 	
 	//board representation char[x][y]
@@ -5,19 +7,35 @@ public class Board {
 	
 	public static final int dim = 3;	//dimension of square board
 	private char[][] board;
+	protected ArrayList<Move> availableMoves;
+	protected ArrayList<Move> madeMoves;
 	
 	public Board() {
 		board = new char[dim][dim];
+		availableMoves = new ArrayList<Move>();
+		madeMoves = new ArrayList<Move>();
 		resetBoard();
 	}
 	
 	public void resetBoard() {
 		fillBoardWith(board, 'n');
+		//fill availableMoves with all possible moves
+		availableMoves.clear();
+		madeMoves.clear();
+		for (int i = 0; i < Board.dim; i++) {
+			for (int k = 0; k < Board.dim; k++) {
+				availableMoves.add(new Move(i, k));
+			}
+		}
 	}
 	
 	public int update(Move mv) {
+		//can probably remove this check since only available/valid moves will be in arraylist
 		if (canMove(mv)) {
 			board[mv.getX()][mv.getY()] = mv.getMark();
+			madeMoves.add(mv);
+			mv.setMark('n');
+			availableMoves.remove(mv);
 			return 1;
 		}
 		return 0;
@@ -56,6 +74,14 @@ public class Board {
 	
 	public char[][] getBoard() {
 		return board;
+	}
+	
+	public ArrayList<Move> getAvailableMoves() {
+		return availableMoves;
+	}
+	
+	public ArrayList<Move> getMadeMoves() {
+		return madeMoves;
 	}
 	
 	

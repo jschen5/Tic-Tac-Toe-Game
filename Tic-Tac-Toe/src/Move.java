@@ -7,6 +7,12 @@ public class Move {
 	private int x;
 	private int y;
 	
+	public Move(int horiz, int vert) {	//if this constructor is called, must be followed by call to setMark() when dequeuing
+		x = horiz;
+		y = vert;
+		symbol = 'n';
+	}
+	
 	public Move(Character mark, int horiz, int vert) {	// needs to be used in try/catch statement
 		
 		String stdMark = mark.toString();
@@ -31,6 +37,10 @@ public class Move {
 		y = vert;
 	}
 	
+	public boolean equals(Object obj) {
+		Move mv = (Move) obj;
+		return ((x == mv.getX()) && (y == mv.getY()) && (symbol == mv.getMark()));
+	}
 	
 	
 	////////////////////////////
@@ -49,6 +59,15 @@ public class Move {
 	
 	public char getMark() {
 		return symbol;
+	}
+	
+	
+	////////////////////////////
+	///////Setter Methods///////
+	////////////////////////////
+	
+	public void setMark(char c) {
+		symbol = c;
 	}
 	
 	

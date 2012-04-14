@@ -1,10 +1,14 @@
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 
 public class BoardTest {
 
+	//all tests assume that Move object is functional and error free
+	
 	@Test
 	public void testBoard() {
 		Board testBd = new Board();
@@ -13,31 +17,62 @@ public class BoardTest {
 				assertTrue(testBd.getBoard()[i][k] == 'n');	//also tests getBoard() method
 			}
 		}
+		for (int i = 0; i < Board.dim; i++) {
+			for (int j = 0; j < Board.dim; j++) {
+				assertTrue(testBd.availableMoves.contains(new Move(i, j)));
+			}
+		}
+		assertTrue(testBd.getMadeMoves().equals(new ArrayList<Move>()));
 	}
 
 	@Test
 	public void testUpdate() {
 		Board testBd = new Board();
 		
-		Move testMv = new Move('x', 0, 0);
+		Move testMv = new Move(0, 0);
+		assertTrue(testBd.availableMoves.contains(testMv));
+		testMv.setMark('x');
 		assertTrue(testBd.update(testMv) == 1);
 		assertTrue(testBd.getBoard()[0][0] == 'x');
+		assertTrue(testBd.getMadeMoves().contains(testMv));
+		testMv.setMark('n');
+		assertFalse(testBd.availableMoves.contains(testMv));
 		
-		testMv = new Move('x', 1, 1);
+		testMv = new Move(1, 1);
+		assertTrue(testBd.availableMoves.contains(testMv));
+		testMv.setMark('x');
 		assertTrue(testBd.update(testMv) == 1);
 		assertTrue(testBd.getBoard()[1][1] == 'x');
+		assertTrue(testBd.getMadeMoves().contains(testMv));
+		testMv.setMark('n');
+		assertFalse(testBd.availableMoves.contains(testMv));
 		
-		testMv = new Move('x', 2, 2);
+		testMv = new Move(2, 2);
+		assertTrue(testBd.availableMoves.contains(testMv));
+		testMv.setMark('x');
 		assertTrue(testBd.update(testMv) == 1);
 		assertTrue(testBd.getBoard()[2][2] == 'x');
+		assertTrue(testBd.getMadeMoves().contains(testMv));
+		testMv.setMark('n');
+		assertFalse(testBd.availableMoves.contains(testMv));
 		
-		testMv = new Move('o', 0, 0);
+		testMv = new Move(0, 0);
+		assertFalse(testBd.availableMoves.contains(testMv));
+		testMv.setMark('o');
 		assertTrue(testBd.update(testMv) == 0);
 		assertTrue(testBd.getBoard()[0][0] == 'x');
+		assertFalse(testBd.getMadeMoves().contains(testMv));
+		testMv.setMark('n');
+		assertFalse(testBd.availableMoves.contains(testMv));
 		
-		testMv = new Move('o', 1, 0);
+		testMv = new Move(1, 0);
+		assertTrue(testBd.availableMoves.contains(testMv));
+		testMv.setMark('o');
 		assertTrue(testBd.update(testMv) == 1);
 		assertTrue(testBd.getBoard()[1][0] == 'o');
+		assertTrue(testBd.getMadeMoves().contains(testMv));
+		testMv.setMark('n');
+		assertFalse(testBd.availableMoves.contains(testMv));
 	}
 
 	@Test

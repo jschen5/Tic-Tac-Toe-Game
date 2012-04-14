@@ -59,5 +59,14 @@ public class MoveTest {
 		}
 		
 	}
-
+	
+	
+	public void testEquals() {
+		Move mv1 = new Move('x', 0, 1);
+		assertTrue(mv1.equals(new Move('x', 0, 1)));
+		assertFalse(mv1.equals(new Move('o', 0, 1)));
+		assertFalse(mv1.equals(new Move('x', 1, 1)));
+		assertFalse(mv1.equals(new Move('x', 0, 0)));
+	}
+	
 }
