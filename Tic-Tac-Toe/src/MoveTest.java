@@ -60,7 +60,7 @@ public class MoveTest {
 		
 	}
 	
-	
+	@Test
 	public void testEquals() {
 		Move mv1 = new Move('x', 0, 1);
 		assertTrue(mv1.equals(new Move('x', 0, 1)));

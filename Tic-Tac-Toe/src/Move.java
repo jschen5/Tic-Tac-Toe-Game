@@ -37,9 +37,27 @@ public class Move {
 		y = vert;
 	}
 	
+	public Move clone() {
+		Move cloneMv = new Move(x, y);
+		cloneMv.setMark(symbol);
+		return cloneMv;
+	}
+	
+	public boolean xEquals(Move mv) {
+		return (x == mv.getX());
+	}
+	
+	public boolean yEquals(Move mv) {
+		return (y == mv.getY());
+	}
+	
+	public boolean markEquals(Move mv) {
+		return (symbol == mv.getMark());
+	}
+	
 	public boolean equals(Object obj) {
 		Move mv = (Move) obj;
-		return ((x == mv.getX()) && (y == mv.getY()) && (symbol == mv.getMark()));
+		return (xEquals(mv) && yEquals(mv) && markEquals(mv));
 	}
 	
 	

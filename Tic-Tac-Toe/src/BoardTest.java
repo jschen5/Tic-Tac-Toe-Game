@@ -19,10 +19,10 @@ public class BoardTest {
 		}
 		for (int i = 0; i < Board.dim; i++) {
 			for (int j = 0; j < Board.dim; j++) {
-				assertTrue(testBd.availableMoves.contains(new Move(i, j)));
+				assertTrue(testBd.getPossibleMoves().contains(new Move(i, j)));
 			}
 		}
-		assertTrue(testBd.getMadeMoves().equals(new ArrayList<Move>()));
+		assertTrue(testBd.getPastMoves().equals(new ArrayList<Move>()));
 	}
 
 	@Test
@@ -30,49 +30,65 @@ public class BoardTest {
 		Board testBd = new Board();
 		
 		Move testMv = new Move(0, 0);
-		assertTrue(testBd.availableMoves.contains(testMv));
+		assertTrue(testBd.getPossibleMoves().contains(testMv));
 		testMv.setMark('x');
 		assertTrue(testBd.update(testMv) == 1);
 		assertTrue(testBd.getBoard()[0][0] == 'x');
-		assertTrue(testBd.getMadeMoves().contains(testMv));
+		assertTrue(testBd.getPastMoves().contains(testMv));
 		testMv.setMark('n');
-		assertFalse(testBd.availableMoves.contains(testMv));
+		assertFalse(testBd.getPossibleMoves().contains(testMv));
 		
 		testMv = new Move(1, 1);
-		assertTrue(testBd.availableMoves.contains(testMv));
+		assertTrue(testBd.getPossibleMoves().contains(testMv));
 		testMv.setMark('x');
 		assertTrue(testBd.update(testMv) == 1);
 		assertTrue(testBd.getBoard()[1][1] == 'x');
-		assertTrue(testBd.getMadeMoves().contains(testMv));
+		assertTrue(testBd.getPastMoves().contains(testMv));
 		testMv.setMark('n');
-		assertFalse(testBd.availableMoves.contains(testMv));
+		assertFalse(testBd.getPossibleMoves().contains(testMv));
 		
 		testMv = new Move(2, 2);
-		assertTrue(testBd.availableMoves.contains(testMv));
+		assertTrue(testBd.getPossibleMoves().contains(testMv));
 		testMv.setMark('x');
 		assertTrue(testBd.update(testMv) == 1);
 		assertTrue(testBd.getBoard()[2][2] == 'x');
-		assertTrue(testBd.getMadeMoves().contains(testMv));
+		assertTrue(testBd.getPastMoves().contains(testMv));
 		testMv.setMark('n');
-		assertFalse(testBd.availableMoves.contains(testMv));
+		assertFalse(testBd.getPossibleMoves().contains(testMv));
 		
 		testMv = new Move(0, 0);
-		assertFalse(testBd.availableMoves.contains(testMv));
+		assertFalse(testBd.getPossibleMoves().contains(testMv));
 		testMv.setMark('o');
 		assertTrue(testBd.update(testMv) == 0);
 		assertTrue(testBd.getBoard()[0][0] == 'x');
-		assertFalse(testBd.getMadeMoves().contains(testMv));
+		assertFalse(testBd.getPastMoves().contains(testMv));
 		testMv.setMark('n');
-		assertFalse(testBd.availableMoves.contains(testMv));
+		assertFalse(testBd.getPossibleMoves().contains(testMv));
 		
 		testMv = new Move(1, 0);
-		assertTrue(testBd.availableMoves.contains(testMv));
+		assertTrue(testBd.getPossibleMoves().contains(testMv));
 		testMv.setMark('o');
 		assertTrue(testBd.update(testMv) == 1);
 		assertTrue(testBd.getBoard()[1][0] == 'o');
-		assertTrue(testBd.getMadeMoves().contains(testMv));
+		assertTrue(testBd.getPastMoves().contains(testMv));
 		testMv.setMark('n');
-		assertFalse(testBd.availableMoves.contains(testMv));
+		assertFalse(testBd.getPossibleMoves().contains(testMv));
+	}
+	
+	@Test
+	public void testUndoMove() {
+		Board testBd = new Board();
+		Move testMv = new Move('x', 0, 1);
+		testBd.update(testMv);
+		
+		assertTrue(testBd.getBoard()[testMv.getX()][testMv.getY()] == 'x');
+		assertFalse(testBd.getPossibleMoves().contains(new Move(testMv.getX(), testMv.getY())));
+		assertTrue(testBd.getPastMoves().contains(testMv));
+		
+		testBd.undoMove(testMv);
+		assertTrue(testBd.getBoard()[testMv.getX()][testMv.getY()] == 'n');
+		assertTrue(testBd.getPossibleMoves().contains(new Move(testMv.getX(), testMv.getY())));
+		assertFalse(testBd.getPastMoves().contains(testMv));
 	}
 
 	@Test
@@ -122,5 +138,22 @@ public class BoardTest {
 		
 	}
 
+	@Test
+	public void testEqualsAndClone() {
+		Board testBd = new Board();
+		Board failBd = new Board();
+		
+		Move testMv = new Move('o', 0, 1);
+		testBd.update(testMv);
+		testMv = new Move('o', 1, 1);
+		testBd.update(testMv);
+		testMv = new Move('o', 2, 1);
+		testBd.update(testMv);
+		
+		Board copyBd = testBd.clone();
+		
+		assertTrue(testBd.equals(copyBd));
+		assertFalse(failBd.equals(copyBd));
+	}
 	
 }

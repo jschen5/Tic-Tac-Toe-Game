@@ -7,38 +7,66 @@ public class Board {
 	
 	public static final int dim = 3;	//dimension of square board
 	private char[][] board;
-	protected ArrayList<Move> availableMoves;
-	protected ArrayList<Move> madeMoves;
+	private ArrayList<Move> possibleMoves;	//all moves in possibleMoves will have mark 'n'
+	private ArrayList<Move> pastMoves;	//all moves in pastMoves will have marks corresponding to the move maker
+	
 	
 	public Board() {
 		board = new char[dim][dim];
-		availableMoves = new ArrayList<Move>();
-		madeMoves = new ArrayList<Move>();
+		possibleMoves = new ArrayList<Move>();
+		pastMoves = new ArrayList<Move>();
 		resetBoard();
 	}
 	
 	public void resetBoard() {
 		fillBoardWith(board, 'n');
 		//fill availableMoves with all possible moves
-		availableMoves.clear();
-		madeMoves.clear();
+		possibleMoves.clear();
+		pastMoves.clear();
 		for (int i = 0; i < Board.dim; i++) {
 			for (int k = 0; k < Board.dim; k++) {
-				availableMoves.add(new Move(i, k));
+				possibleMoves.add(new Move(i, k));
 			}
 		}
+	}
+	
+	public Board clone() {
+		Board clone = new Board();
+		for (int i = 0; i < Board.dim; i++) {
+			for (int k = 0; k < Board.dim; k++) {
+				clone.board[i][k] = this.board[i][k];
+			}
+		}
+		clone.possibleMoves.clear();
+		for (int i = 0; i < this.possibleMoves.size(); i++) {
+			clone.possibleMoves.add(this.possibleMoves.get(i).clone());
+		}
+		for (int i = 0; i < this.pastMoves.size(); i++) {
+			clone.pastMoves.add(this.pastMoves.get(i).clone());
+		}
+		
+		return clone;
 	}
 	
 	public int update(Move mv) {
 		//can probably remove this check since only available/valid moves will be in arraylist
 		if (canMove(mv)) {
-			board[mv.getX()][mv.getY()] = mv.getMark();
-			madeMoves.add(mv);
+			char origMark = mv.getMark();
+			board[mv.getX()][mv.getY()] = origMark;
+			pastMoves.add(mv);
 			mv.setMark('n');
-			availableMoves.remove(mv);
+			possibleMoves.remove(mv);
+			mv.setMark(origMark);	//set mark back to original player mark for undoMove(), otherwise move never used again
 			return 1;
 		}
 		return 0;
+	}
+	
+	public void undoMove(Move mv) {
+		board[mv.getX()][mv.getY()] = 'n';
+		pastMoves.remove(mv);
+		mv.setMark('n');
+		possibleMoves.add(mv);
 	}
 	
 	public char victConfig() {
@@ -66,6 +94,28 @@ public class Board {
 		return 'n';
 	}
 	
+	public boolean equals(Object obj) {	//two boards with the same 2D array representation must be the same board
+		Board bd = (Board) obj;
+		for (int i = 0; i < Board.dim; i++) {
+			for (int k = 0; k < Board.dim; k++) {
+				if (this.board[i][k] != bd.board[i][k]) {
+					return false;
+				}
+			}
+		}
+		for (int i = 0; i < this.possibleMoves.size(); i++) {
+			if (!this.possibleMoves.contains(bd.possibleMoves.get(i))) {
+				return false;
+			}
+		}
+		for (int i = 0; i < this.pastMoves.size(); i++) {
+			if (!this.pastMoves.contains(bd.pastMoves.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	
 	
 	////////////////////////////
@@ -76,12 +126,12 @@ public class Board {
 		return board;
 	}
 	
-	public ArrayList<Move> getAvailableMoves() {
-		return availableMoves;
+	public ArrayList<Move> getPossibleMoves() {
+		return possibleMoves;
 	}
 	
-	public ArrayList<Move> getMadeMoves() {
-		return madeMoves;
+	public ArrayList<Move> getPastMoves() {
+		return pastMoves;
 	}
 	
 	

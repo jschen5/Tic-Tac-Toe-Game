@@ -4,19 +4,26 @@ import java.util.ArrayList;
 public class AI_Basic {
 	
 	protected String name;
-	protected char symbol;
+	protected char symbolAI;
+	protected char symbolPlayer;
 	protected Board gameBrd;
-	protected ArrayList<Move> possibleMoves;
+	protected ArrayList<Move> availableMoves;
+	protected ArrayList<Move> madeMoves;
 	
-	public AI_Basic(String randGenName, char mark, Board brd) {
+	public AI_Basic(String randGenName, char mark, char oppMark, Board brd) {
 		name = randGenName;
-		symbol = mark;
+		symbolAI = mark;
+		symbolPlayer = oppMark;
 		gameBrd = brd;
+		availableMoves = gameBrd.getPossibleMoves();
+		madeMoves = new ArrayList<Move>();
 	}
 	
 	public Move nextMove() {
-		Move nextMv = gameBrd.availableMoves.get((int) Math.random()*4);
-		nextMv.setMark(symbol);
+		Move nextMv = availableMoves.get((int) (Math.random()*(availableMoves.size())));
+		nextMv.setMark(symbolAI);	//this will also change the mark of the move in availableMoves, since they are the same
+									//should be immediately removed from availableMoves after this method by call to update(...)
+		madeMoves.add(nextMv);
 		return nextMv;
 	}
 	
@@ -31,11 +38,15 @@ public class AI_Basic {
 	}
 	
 	public char getSymbol() {
-		return symbol;
+		return symbolAI;
 	}
 	
 	public Board getBrd() {
 		return gameBrd;
+	}
+	
+	public ArrayList<Move> getAvailableMoves() {
+		return availableMoves;
 	}
 	
 }
