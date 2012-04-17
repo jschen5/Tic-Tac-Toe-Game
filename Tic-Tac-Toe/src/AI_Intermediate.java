@@ -21,6 +21,10 @@ public class AI_Intermediate extends AI_Basic {
 		if (!blockingMoves.isEmpty()) {
 			return blockingMoves.get((int) (Math.random()*(blockingMoves.size())));
 		}
+		return randomNextMove();
+	}
+	
+	public Move randomNextMove() {
 		return super.nextMove();
 	}
 	
