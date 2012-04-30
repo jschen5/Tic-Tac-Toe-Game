@@ -1,0 +1,35 @@
+import java.awt.Graphics;
+
+import java.awt.Graphics2D;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class Skeleton extends JPanel {
+	
+	public char winner;
+	
+	public Skeleton(char mark) {
+		winner = mark;
+	}
+
+    public void paintComponent(Graphics g) {
+
+    	super.paintComponent(g);
+    	
+        Graphics2D g2d = (Graphics2D) g;
+
+        g2d.drawString(winner + " is the winner!", 50, 50);
+    }
+
+
+    public static void main(String[] args) {
+
+        JFrame frame = new JFrame("Java 2D Skeleton");
+        frame.add(new Skeleton('x'));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(280, 240);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+}

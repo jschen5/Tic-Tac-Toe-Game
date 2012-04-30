@@ -1,0 +1,6 @@
+1334361558772	Rename resource 'OpponentAI.java'
+1334431710034	Rename field 'availableMoves'
+1334431774517	Rename field 'madeMoves'
+1334431910457	Change method 'getMadeMoves'
+1334431926437	Change method 'getAvailableMoves'
+1334440262441	Rename field 'symbol'
