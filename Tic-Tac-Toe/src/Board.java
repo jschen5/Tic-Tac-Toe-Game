@@ -3,11 +3,11 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Ellipse2D;
@@ -37,11 +37,12 @@ public class Board extends JPanel {
 	private int currentX;
 	private int currentY;
 
-	private static int turn;	//Player: 0 , AI: 1
-	private static boolean gameOver;
+	protected int turn;	//Player: 0 , AI: 1
+	protected boolean gameOver;
 
 
 	public Board() {
+		
 		board = new char[dim][dim];
 		possibleMoves = new ArrayList<Move>();
 		pastMoves = new ArrayList<Move>();
@@ -169,6 +170,7 @@ public class Board extends JPanel {
 						nextMv.setMark(playerMark);
 						update(nextMv);
 						turn = 1;
+						victConfig();
 					}
 
 				}
@@ -351,6 +353,7 @@ public class Board extends JPanel {
 
 	public static void main (String args[]) {
 		JFrame frame = new JFrame("TicTacToe");
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Board game = new Board();
 		frame.add(game);
@@ -358,21 +361,28 @@ public class Board extends JPanel {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
-		AI_Experienced Joe = new AI_Experienced("Joe", 'x', 'o', game);
+		AI_Experienced Joe = new AI_Experienced("Joe", game.aiMark, game.playerMark, game);
 		
-		while (!gameOver) {
+		while (game.gameOver == false) {
 			//System.out.println(turn);
-			if (turn == 1) {
-				game.update(Joe.nextMove());
-				turn = 0;
-				game.victConfig();
+			if (game.turn == 1) {
+				if (!game.possibleMoves.isEmpty()) {
+					game.update(Joe.nextMove());
+					game.turn = 0;
+					game.victConfig();
+				}
 			}
 		}
 		
 		char winner = game.victConfig();
-		//frame.remove(game);
-		frame.add(new Skeleton(winner));
-		frame.repaint();
+		JFrame victory = new JFrame(winner + " is the victor.");
+		victory.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		victory.add(new VictoryPanel(winner));
+		victory.setSize(500, 200);
+		victory.setLocationRelativeTo(null);
+		victory.setVisible(true);
+		//frame.add(new Skeleton(winner));
+		//frame.repaint();
 		
 	}
 

@@ -5,11 +5,11 @@ import java.awt.Graphics2D;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Skeleton extends JPanel {
+public class VictoryPanel extends JPanel {
 	
 	public char winner;
 	
-	public Skeleton(char mark) {
+	public VictoryPanel(char mark) {
 		winner = mark;
 	}
 

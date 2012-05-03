@@ -156,4 +156,37 @@ public class BoardTest {
 		assertFalse(failBd.equals(copyBd));
 	}
 	
+	@Test
+	public void testBug1() {
+		
+		Board bd = new Board();
+		bd.update(new Move('o', 0, 0));
+		bd.update(new Move('o', 0, 2));
+		bd.update(new Move('x', 2, 0));
+		bd.update(new Move('x', 0, 1));
+		bd.update(new Move('x', 1, 1));
+		
+		assertTrue(bd.victConfig() == 'n');
+		assertTrue(bd.gameOver == false);
+	}
+	
+	public void testBug2() {
+		
+		Board bd = new Board();
+		
+		bd.update(new Move('o', 0, 0));
+		bd.update(new Move('o', 0, 1));
+		bd.update(new Move('o', 2, 0));
+		bd.update(new Move('o', 2, 1));
+		bd.update(new Move('o', 1, 2));
+		
+		bd.update(new Move('x', 0, 2));
+		bd.update(new Move('x', 1, 0));
+		bd.update(new Move('x', 1, 1));
+		bd.update(new Move('x', 2, 2));
+		
+		assertTrue(bd.victConfig() == 'n');
+		assertTrue(bd.gameOver == true);
+	}
+	
 }

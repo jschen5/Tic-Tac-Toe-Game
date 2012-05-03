@@ -20,6 +20,9 @@ public class AI_Basic {
 	}
 	
 	public Move nextMove() {
+		if (availableMoves.isEmpty()) {
+			return null;
+		}
 		Move nextMv = availableMoves.get((int) (Math.random()*(availableMoves.size())));
 		nextMv.setMark(symbolAI);	//this will also change the mark of the move in availableMoves, since they are the same
 									//should be immediately removed from availableMoves after this method by call to update(...)
